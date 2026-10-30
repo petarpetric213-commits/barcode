@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="sr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EAN13 Generator | Besplatni generator EAN-13 barkoda</title>
+  <meta name="description" content="Generiši profesionalne EAN-13 barkode besplatno. Bez registracije, bez limita.">
+  <link rel="preload" as="style" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%233b82f6'/%3E%3Ctext x='50' y='65' font-family='Arial' font-size='55' text-anchor='middle' fill='white'%3EE%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="shell">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-mark">E</span>
+        <div>
+          <div class="brand-name">EAN13 Generator</div>
+          <div class="brand-tag">Generate professional EAN-13 barcodes for free. No registration, no limits.</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-icon theme-toggle" id="themeToggle" aria-label="Prebaci temu" title="Svetla / tamna tema">
+          <span class="theme-icon">🌙</span>
+        </button>
+        <a href="#about" class="btn btn-outline">O aplikaciji</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="shell nav-shell">
+    <a class="nav-link active" href="#generator" data-section="generator">Generiši barkod</a>
+    <a class="nav-link" href="#bulk" data-section="bulk">Veći broj barkoda</a>
+    <a class="nav-link" href="#history" data-section="history">Istorija</a>
+    <a class="nav-link" href="#about" data-section="about">O aplikaciji</a>
+  </nav>
+
+  <main class="shell">
+    <!-- Toast -->
+    <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+
+    <!-- Generator section -->
+    <section id="generator" class="page-section section-active">
+      <div class="section-header">
+        <h1>Generiši EAN-13 barkod</h1>
+        <p>Unesi 12 ili 13 cifara — kontrolna cifra se računa automatski.</p>
+      </div>
+
+      <div class="card generator-card">
+        <div class="input-row">
+          <input type="text" id="eanInput" maxlength="13" placeholder="Npr. 400638133393 (12 ili 13 cifara)"
+                 aria-label="Unesi EAN-13 broj">
+          <div class="input-actions">
+            <button class="btn btn-primary" id="generateBtn">GENERIŠI BARKOD</button>
+            <button class="btn btn-secondary" id="randomBtn">RANDOM BARKOD</button>
+          </div>
+        </div>
+
+        <div class="hint-row">
+          <span id="checkHint" class="hint"></span>
+          <span id="validityBadge" class="validity"></span>
+        </div>
+
+        <!-- Barcode preview -->
+        <div class="preview-wrap">
+          <div class="preview-surface">
+            <svg id="barcode"></svg>
+          </div>
+          <div class="preview-info">
+            <div class="ean-display" id="eanDisplay">—</div>
+            <div class="ean-label">EAN-13 broj</div>
+          </div>
+        </div>
+
+        <div class="preview-actions">
+          <button class="btn btn-icon" id="copyBtn" title="Kopiraj EAN broj"><span>📋</span> Kopiraj broj</button>
+          <button class="btn btn-icon" id="printBtn" title="Štampaj"><span>🖨️</span> Štampaj</button>
+        </div>
+
+        <!-- Settings -->
+        <div class="settings">
+          <h3 class="settings-title">Podešavanja izvoza i prikaza</h3>
+          <div class="settings-grid">
+            <div class="field">
+              <label>Širina barkoda <span id="valWidth"></span></label>
+              <input type="range" id="sWidth" min="1" max="5" value="2">
+            </div>
+            <div class="field">
+              <label>Visina barkoda <span id="valHeight"></span></label>
+              <input type="range" id="sHeight" min="30" max="200" value="80">
+            </div>
+            <div class="field">
+              <label>Veličina teksta <span id="valFont"></span></label>
+              <input type="range" id="sFont" min="8" max="40" value="16">
+            </div>
+            <div class="field">
+              <label>Margina <span id="valMargin"></span></label>
+              <input type="range" id="sMargin" min="0" max="40" value="10">
+            </div>
+            <div class="field">
+              <label>Rezolucija izvoza</label>
+              <select id="sResolution">
+                <option value="1">1× (standardno)</option>
+                <option value="2">2× (visoka)</option>
+                <option value="3">3× (štamparska)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Downloads -->
+        <div class="downloads">
+          <h3 class="settings-title">Preuzmi barkod</h3>
+          <div class="btn-group">
+            <button class="btn btn-download" id="downloadPng"><span>🖼️</span> PNG</button>
+            <button class="btn btn-download" id="downloadSvg"><span>🎨</span> SVG</button>
+            <button class="btn btn-download" id="downloadPdf"><span>📄</span> PDF</button>
+          </div>
+          <p class="downloads-hint">Svi formati se generišu lokalno u tvojem pretraživaču. Nikakvi podaci ne napuštaju tvoj uređaj.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bulk section -->
+    <section id="bulk" class="page-section">
+      <div class="section-header">
+        <h1>Veći broj barkoda odjednom</h1>
+        <p>Unesi brojeve po jednom u redu, ili uvezi CSV/TXT fajl.</p>
+      </div>
+
+      <div class="card bulk-card">
+        <div class="bulk-toolbar">
+          <button class="btn btn-outline" id="bulkCopyExample"><span>📋</span> Primer liste</button>
+          <button class="btn btn-outline" id="bulkCopyList"><span>📋</span> Kopiraj listu</button>
+          <button class="btn btn-outline" id="bulkClear"><span>🗑️</span> Obriši</button>
+          <input type="file" id="bulkImport" accept=".csv,.txt,.tsv" style="display:none">
+          <label class="btn btn-outline bulk-import-label" for="bulkImport"><span>📁</span> Uvezi fajl</label>
+        </div>
+
+        <textarea id="bulkInput" rows="10" placeholder="400638133393
+400638133394
+400638133395"></textarea>
+        <div class="bulk-info" id="bulkInfo">0 brojeva</div>
+
+        <div class="bulk-actions">
+          <button class="btn btn-primary" id="bulkGenerate">GENERIŠI SVA</button>
+          <button class="btn btn-download" id="bulkDownloadZip"><span>📦</span> Preuzmi sve (ZIP)</button>
+        </div>
+
+        <div id="bulkResults" class="bulk-results">
+          <h3>Rezultati</h3>
+          <div id="bulkGrid" class="bulk-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- History section -->
+    <section id="history" class="page-section">
+      <div class="section-header">
+        <h1>Istorija</h1>
+        <p>Poslednjih 50 generisanih barkoda, čuvano lokalno u tvojem pretraživaču.</p>
+      </div>
+      <div class="card history-card">
+        <div class="history-toolbar">
+          <button class="btn btn-outline" id="historyClear" title="Obriši celu istoriju"><span>🗑️</span> Obriši istoriju</button>
+        </div>
+        <div id="historyList" class="history-list">Nema generisanih barkoda.</div>
+      </div>
+    </section>
+
+    <!-- About section -->
+    <section id="about" class="page-section">
+      <div class="card about-card">
+        <h1>O aplikaciji</h1>
+        <h2>Šta je EAN-13?</h2>
+        <p>EAN-13 (<i>European Article Number</i>) je standardni barkod koji se koristi za identifikaciju prodajnih proizvoda širom sveta. Sastoji se od tačno <strong>13 cifara</strong>:</p>
+        <ul>
+          <li>prvih 12 cifara identifikuje proizvođača i proizvod (dodeljuje GS1 organizacija),</li>
+          <li>13. cifra je <strong>kontrolna cifra</strong>, računata po matematičkom algoritmu kako bi se sprečile greške pri skeniranju i unosu.</li>
+        </ul>
+        <h3>Kako se računa kontrolna cifra?</h3>
+        <ol>
+          <li>Cifre na neparnim pozicijama (1., 3., 5… 11.) se zbrajaju sa težinom 1.</li>
+          <li>Cifre na parnim pozicijama (2., 4., 6… 12.) se zbrajaju sa težinom 3.</li>
+          <li>Zbir se deli sa 10, a kontrolna cifra je <code>(10 − (zbir mod 10)) mod 10</code>.</li>
+        </ol>
+        <h3>VAŽNA NAPOMENA o GS1 identifikaciji</h3>
+        <div class="disclaimer">
+          Generisanje matematički važećeg EAN-13 broja <strong>ne znači</strong> da je tvojoj.company ili proizvodu dodeljen zvanični GS1 identifikacioni broj. Za komercijalnu identifikaciju proizvoda u prodajnim mrežama potrebno je da obratite se vašoj lokalnoj GS1 organizaciji i da vam dodeli oficialne brojeve. Barkod generisan ovom aplikacijom ispravno će proći kroz čitač barkoda, ali ne mora biti registrovan u GS1 bazi podataka.
+        </div>
+        <h2>O ovom alatku</h2>
+        <ul>
+          <li>Potpuno besplatan, bez registracije i bez ograničenja broja generisanja.</li>
+          <li>Radi potpuno lokalno u tvojem pretraživaču — bez servera, bez baze podataka i bez slanja podataka van tvojeg uređaja.</li>
+          <li>Generiši po jedan ili više barkoda odjednom, preuzmi ih kao PNG, SVG, PDF ili ZIP arhivu.</li>
+          <li>Spremno za postavljanje na GitHub Pages, Netlify ili Vercel.</li>
+        </ul>
+        <h3>Korišćene biblioteke</h3>
+        <ul>
+          <li><a href="https://lindell.me/JsBarcode/" target="_blank" rel="noopener">JsBarcode</a> — generisanje EAN-13 barkoda</li>
+          <li><a href="https://github.com/MrRio/jsPDF" target="_blank" rel="noopener">jsPDF</a> — izvoz PDF</li>
+          <li><a href="https://stukszip.github.io/jszip/" target="_blank" rel="noopener">JSZip</a> — ZIP arhive</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell">
+    <p>EAN13 Generator — besplatan alat za generisanje EAN-13 barkoda. Generisanje validnog EAN-13 broja ne dodeljuje zvaničan GS1 broj.</p>
+  </footer>
+
+  <script src="lib/JsBarcode.all.min.js"></script>
+  <script src="lib/jspdf.umd.min.js"></script>
+  <script src="lib/jszip.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
